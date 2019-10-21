@@ -1,4 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How to start the server
+
+```bash
+# Run this line if it's the first time you try to build
+npm i
+
+```
+## Link to firebase
+
+[simpcys-form](https://reactjs.org/).
 
 ## Available Scripts
 
