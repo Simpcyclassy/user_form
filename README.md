@@ -8,7 +8,7 @@ npm i
 ```
 ## Link to firebase
 
-[simpcys-form](https://reactjs.org/).
+[simpcys-form](https://reactjs.org/https://simpcys-form.firebaseapp.com/).
 
 ## Available Scripts
 
