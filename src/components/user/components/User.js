@@ -87,10 +87,10 @@ class List extends React.Component {
                 id: uuid(),
                 lastName: values.lastName,
             };
-            this.setState({
-                users: users.concat(newUsers),
+            this.setState(e => ({
+                users: [...e.users, newUsers],
                 visible: false,
-            });
+            }));
         });
     };
 
