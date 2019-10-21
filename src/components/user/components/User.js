@@ -9,6 +9,7 @@ import { MODAL_TEXTS, TABLE_TEXTS } from '../constants';
 const { ADD_USER, DATE_PICKER, PRIMARY } = MODAL_TEXTS;
 const {
     ACTION,
+    ACTION_,
     AGE,
     AGE_,
     BIRTHDAY,
@@ -74,26 +75,26 @@ class List extends React.Component {
 
     handleCreate = () => {
         const { form } = this.formRef.props;
+        const users = [...this.state.users];
         form.validateFields((error, values) => {
             if (error) {
                 return error;
             }
             form.resetFields();
-            const newUsers = {
+            users.push({
                 age: values.age,
                 birthday: values[DATE_PICKER].format('YYYY-MM-DD'),
                 firstName: values.firstName,
                 hobby: values.hobby,
                 id: uuid(),
                 lastName: values.lastName,
-            };
-            this.setState(e => ({
-                users: [...e.users, newUsers],
+            });
+            this.setState({
+                users,
                 visible: false,
-            }));
+            });
         });
     };
-
     saveFormRef = formRef => {
         this.formRef = formRef;
     }
@@ -149,7 +150,7 @@ class List extends React.Component {
                                         <Icon className={DANGER} type={DELETE} />
                                     </Popconfirm>
                                 ),
-                                title: ACTION,
+                                title: ACTION_,
                             },
                         ]
                     }

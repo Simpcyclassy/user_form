@@ -1,8 +1,9 @@
 /** @constant */
 export const TABLE_TEXTS = {
     ACTION: 'action',
+    ACTION_: 'Action',
     AGE: 'age',
-    AGE_: 'age',
+    AGE_: 'Age',
     BIRTHDAY: 'birthday',
     BIRTH_DAY: 'Birthday',
     DANGER: 'danger',
@@ -10,7 +11,7 @@ export const TABLE_TEXTS = {
     FIRSTNAME: 'firstName',
     FIRST_NAME: 'First Name',
     HOBBY: 'hobby',
-    HOBBY_: 'hobby',
+    HOBBY_: 'Hobby',
     LASTNAME: 'lastName',
     LAST_NAME: 'Last Name',
     POP_QUESTION: 'Are you sure you want to remove item?',
