@@ -23,3 +23,11 @@ export const REMOVE_USER = `${NAME}/REMOVE_USER`;
  * @type {String}
  */
 export const ADD_USER = `${NAME}/ADD_USER`;
+
+/**
+ * Fired by the {@link actions.resetUpdateState resetUpdateState}
+ * action creator.
+ *
+ * @type {String}
+ */
+export const RESET_UPDATE_STATE = `${NAME}/RESET_UPDATE_STATE`;

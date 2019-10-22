@@ -75,9 +75,11 @@ class List extends React.Component {
     componentDidUpdate() {
         const { isUpdated } = this.props;
         const { visible } = this.state;
+        const { resetUpdateState } = this.props.actions;
 
         if (visible && isUpdated) {
             this.setState({ visible: false });
+            resetUpdateState();
         }
     }
     saveFormRef = formRef => {

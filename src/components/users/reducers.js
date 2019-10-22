@@ -1,4 +1,4 @@
-import { ADD_USER, REMOVE_USER, UPDATE_USERS_LIST } from './actionTypes';
+import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
 
 const dataSource = [
     {
@@ -34,7 +34,8 @@ const initialState = {
 
 const generateUsersObject = array =>
     array.reduce((obj, item) => {
-        obj[item.id] = item;
+        const { id } = item;
+        obj[id] = item;
         return obj;
     }, {});
 
@@ -71,7 +72,7 @@ export default (state = { ...initialState }, action) => {
 
         case ADD_USER: {
             const { users } = state;
-            const { payload: { item } } = action;
+            const { payload: item } = action;
             return {
                 ...state,
                 isUpdated: true,
@@ -79,6 +80,12 @@ export default (state = { ...initialState }, action) => {
             };
         }
 
+        case RESET_UPDATE_STATE: {
+            return {
+                ...state,
+                isUpdated: false,
+            };
+        }
         default:
             return state;
     }

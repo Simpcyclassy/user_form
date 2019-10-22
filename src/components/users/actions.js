@@ -1,4 +1,4 @@
-import { ADD_USER, REMOVE_USER, UPDATE_USERS_LIST } from './actionTypes';
+import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
 
 /**
  * Triggers request to update users items
@@ -33,4 +33,16 @@ export const removeUser = payload => ({
 export const addUser = payload => ({
     payload,
     type: ADD_USER,
+});
+
+/**
+ * riggers request to reset update state
+ *
+ * @function
+ * @param {Object} payload An object of captured users
+ * @return {void} The {@link actionTypes.RESET_UPDATE_STATE RESET_UPDATE_STATE} action.
+ */
+export const resetUpdateState = payload => ({
+    payload,
+    type: RESET_UPDATE_STATE,
 });
