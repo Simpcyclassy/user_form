@@ -1,4 +1,7 @@
 /** @constant */
+export const NAME = 'users';
+
+/** @constant */
 export const TABLE_TEXTS = {
     ACTION: 'action',
     ACTION_: 'Action',

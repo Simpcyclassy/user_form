@@ -6,13 +6,13 @@ import 'antd/dist/antd.css';
 import store from './store';
 import * as serviceWorker from './serviceWorker';
 
-import user from './components/user';
+import users from './components/users';
 
-const { User } = user.components;
+const { Users } = users.components;
 
 ReactDOM.render(
     <Provider store={store}>
-        <User />
+        <Users />
     </Provider>,
     document.getElementById('root'),
 );

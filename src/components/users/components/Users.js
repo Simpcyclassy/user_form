@@ -2,8 +2,12 @@
 import React from 'react';
 import { Button, Icon, Popconfirm, Table } from 'antd';
 import uuid from 'uuid/v1';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import UserModal from './UserModal';
+import * as actions from '../actions';
+import { getisUpdated, getUsers } from '../selectors';
 import { MODAL_TEXTS, TABLE_TEXTS } from '../constants';
 
 const { ADD_USER, DATE_PICKER, PRIMARY } = MODAL_TEXTS;
@@ -25,45 +29,20 @@ const {
     POP_QUESTION,
 } = TABLE_TEXTS;
 
-const users = [
-    {
-        age: '24',
-        birthday: '2000-10-02',
-        firstName: 'Chioma',
-        hobby: 'Learning',
-        id: '1',
-        lastName: 'Onyekpere',
-    },
-    {
-        age: '26',
-        birthday: '1900-09-02',
-        firstName: 'Tony',
-        hobby: 'Hiking',
-        id: '2',
-        lastName: 'Mecca',
-    },
-    {
-        age: '21',
-        birthday: '1960-10-01',
-        firstName: 'Lucia',
-        hobby: 'Swimming',
-        id: '3',
-        lastName: 'Lucious',
-    },
-];
-
 class List extends React.Component {
     state = {
-        users,
         visible: false,
     };
-
-    handleRemove = name => {
-        const filteredItems = this.state.users.filter(user => user !== name);
-        this.setState({
-            users: [...filteredItems],
-        });
+    componentDidMount() {
+        const { updateUsersList } = this.props.actions;
+        updateUsersList();
     }
+
+    handleRemove = id => {
+        const { removeUser } = this.props.actions;
+        const payload = { id };
+        removeUser(payload);
+    };
 
     showModal = () => {
         this.setState({ visible: true });
@@ -75,32 +54,41 @@ class List extends React.Component {
 
     handleCreate = () => {
         const { form } = this.formRef.props;
-        const users = [...this.state.users];
+        const { addUser } = this.props.actions;
         form.validateFields((error, values) => {
             if (error) {
                 return error;
             }
             form.resetFields();
-            users.push({
+            const user = {
                 age: values.age,
                 birthday: values[DATE_PICKER].format('YYYY-MM-DD'),
                 firstName: values.firstName,
                 hobby: values.hobby,
                 id: uuid(),
                 lastName: values.lastName,
-            });
-            this.setState({
-                users,
-                visible: false,
-            });
+            };
+            addUser(user);
         });
     };
+
+    componentDidUpdate() {
+        const { isUpdated } = this.props;
+        const { visible } = this.state;
+
+        if (visible && isUpdated) {
+            this.setState({ visible: false });
+        }
+    }
     saveFormRef = formRef => {
         this.formRef = formRef;
     }
 
     render() {
         const { visible } = this.state;
+        const { users } = this.props;
+        console.log(users);
+        const values = Object.values(users);
 
         return (
             <div>
@@ -112,7 +100,7 @@ class List extends React.Component {
                     onCreate={this.handleCreate}
                 />
                 <Table
-                    dataSource={this.state.users}
+                    dataSource={values}
                     columns={
                         [
                             {
@@ -145,7 +133,7 @@ class List extends React.Component {
                                 render: (text, record) => (
                                     <Popconfirm
                                         title={POP_QUESTION}
-                                        onConfirm={() => this.handleRemove(record)}
+                                        onConfirm={() => this.handleRemove(record.id)}
                                     >
                                         <Icon className={DANGER} type={DELETE} />
                                     </Popconfirm>
@@ -161,4 +149,13 @@ class List extends React.Component {
     }
 }
 
-export default List;
+const mapStateToProps = state => ({
+    users: getUsers(state),
+    isUpdated: getisUpdated(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);
