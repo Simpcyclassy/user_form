@@ -29,7 +29,7 @@ const dataSource = [
 
 const initialState = {
     isUpdated: false,
-    users: dataSource,
+    users: {},
 };
 
 const generateUsersObject = array => array.reduce((obj, item) => {

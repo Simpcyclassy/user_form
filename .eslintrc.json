@@ -107,6 +107,7 @@
         "symbol-description": "error",
         "max-len": ["error", { "code": 100 }],
         "sort-keys": ["error", "asc"],
+        "react/display-name": [0, { "ignoreTranspilerName": true }],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/no-danger": "error",

@@ -32,9 +32,9 @@ const Users = () => {
 
     const users = useSelector(state => state.users);
     console.log(users);
-    const tableData = Object.values(users);
     const isUpdated = useSelector(state => state.isUpdated);
     const dispatch = useDispatch();
+    const tableData = Object.values(users);
 
     useEffect(() => {
         const { updateUsersList, resetUpdateState } = actions;
@@ -44,7 +44,7 @@ const Users = () => {
             setVisible(false);
             dispatch(resetUpdateState());
         }
-    }, []);
+    }, [dispatch, isUpdated, visible]);
 
     const handleRemove = id => {
         const { removeUser } = actions;
