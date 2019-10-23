@@ -1,13 +1,10 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Icon, Popconfirm, Table } from 'antd';
 import uuid from 'uuid/v1';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import UserModal from './UserModal';
 import * as actions from '../actions';
-import { getisUpdated, getUsers } from '../selectors';
 import { MODAL_TEXTS, TABLE_TEXTS } from '../constants';
 
 const { ADD_USER, DATE_PICKER, PRIMARY } = MODAL_TEXTS;
@@ -28,57 +25,36 @@ const {
     LAST_NAME,
     POP_QUESTION,
 } = TABLE_TEXTS;
-const dataSource = [
-    {
-        age: '24',
-        birthday: '2000-10-02',
-        firstName: 'Chioma',
-        hobby: 'Learning',
-        id: '1',
-        lastName: 'Onyekpere',
-    },
-    {
-        age: '26',
-        birthday: '1900-09-02',
-        firstName: 'Tony',
-        hobby: 'Hiking',
-        id: '2',
-        lastName: 'Mecca',
-    },
-    {
-        age: '21',
-        birthday: '1960-10-01',
-        firstName: 'Lucia',
-        hobby: 'Swimming',
-        id: '3',
-        lastName: 'Lucious',
-    },
-];
 
-const Users = props => {
+const Users = () => {
     const [visible, setVisible] = useState(false);
     const [formRef, setFormRef] = useState(null);
 
+    const users = useSelector(state => state.users);
+    console.log(users);
+    const tableData = Object.values(users);
+    const isUpdated = useSelector(state => state.isUpdated);
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const { isUpdated } = props;
-        const { updateUsersList, resetUpdateState } = props.actions;
-        updateUsersList();
+        const { updateUsersList, resetUpdateState } = actions;
+        dispatch(updateUsersList());
 
         if (visible && isUpdated) {
             setVisible(false);
-            resetUpdateState();
+            dispatch(resetUpdateState());
         }
-    });
+    }, []);
 
     const handleRemove = id => {
-        const { removeUser } = props.actions;
+        const { removeUser } = actions;
         const payload = { id };
-        removeUser(payload);
+        dispatch(removeUser(payload));
     };
 
     const handleCreate = () => {
         const { form } = formRef.props;
-        const { addUser } = props.actions;
+        const { addUser } = actions;
         form.validateFields((error, values) => {
             if (error) {
                 return error;
@@ -92,7 +68,7 @@ const Users = props => {
                 id: uuid(),
                 lastName: values.lastName,
             };
-            addUser(user);
+            dispatch(addUser(user));
         });
     };
 
@@ -101,10 +77,6 @@ const Users = props => {
             setFormRef(node);
         }
     }, []);
-
-    const { users } = props;
-    console.log(users);
-    const values = Object.values(users);
 
     return (
         <div>
@@ -116,7 +88,7 @@ const Users = props => {
                 onCreate={() => handleCreate()}
             />
             <Table
-                dataSource={dataSource}
+                dataSource={tableData}
                 columns={
                     [
                         {
@@ -164,20 +136,4 @@ const Users = props => {
     );
 };
 
-Users.propTypes = {
-    actions: PropTypes.objectOf(PropTypes.func),
-    isUpdated: PropTypes.bool,
-    updateUsersList: PropTypes.objectOf(PropTypes.func),
-    users: PropTypes.objectOf(PropTypes.any),
-};
-
-const mapStateToProps = state => ({
-    isUpdated: getisUpdated(state),
-    users: getUsers(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default Users;
