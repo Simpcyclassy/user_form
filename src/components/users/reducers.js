@@ -28,16 +28,15 @@ const dataSource = [
 ];
 
 const initialState = {
-    users: {},
     isUpdated: false,
+    users: {},
 };
 
-const generateUsersObject = array =>
-    array.reduce((obj, item) => {
-        const { id } = item;
-        obj[id] = item;
-        return obj;
-    }, {});
+const generateUsersObject = array => array.reduce((obj, item) => {
+    const { id } = item;
+    obj[id] = item;
+    return obj;
+}, {});
 
 const removeUsers = (items, id) => {
     items[id] && delete items[id];
@@ -49,7 +48,6 @@ const addUsers = (items, newItem) => {
     items[id] = newItem;
     return { ...items };
 };
-
 
 export default (state = { ...initialState }, action) => {
     switch (action.type) {

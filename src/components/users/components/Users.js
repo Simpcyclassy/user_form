@@ -1,5 +1,5 @@
-/* eslint-disable consistent-return */
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Icon, Popconfirm, Table } from 'antd';
 import uuid from 'uuid/v1';
 import { bindActionCreators } from 'redux';
@@ -28,33 +28,57 @@ const {
     LAST_NAME,
     POP_QUESTION,
 } = TABLE_TEXTS;
+const dataSource = [
+    {
+        age: '24',
+        birthday: '2000-10-02',
+        firstName: 'Chioma',
+        hobby: 'Learning',
+        id: '1',
+        lastName: 'Onyekpere',
+    },
+    {
+        age: '26',
+        birthday: '1900-09-02',
+        firstName: 'Tony',
+        hobby: 'Hiking',
+        id: '2',
+        lastName: 'Mecca',
+    },
+    {
+        age: '21',
+        birthday: '1960-10-01',
+        firstName: 'Lucia',
+        hobby: 'Swimming',
+        id: '3',
+        lastName: 'Lucious',
+    },
+];
 
-class List extends React.Component {
-    state = {
-        visible: false,
-    };
-    componentDidMount() {
-        const { updateUsersList } = this.props.actions;
+const Users = props => {
+    const [visible, setVisible] = useState(false);
+    const [formRef, setFormRef] = useState(null);
+
+    useEffect(() => {
+        const { isUpdated } = props;
+        const { updateUsersList, resetUpdateState } = props.actions;
         updateUsersList();
-    }
 
-    handleRemove = id => {
-        const { removeUser } = this.props.actions;
+        if (visible && isUpdated) {
+            setVisible(false);
+            resetUpdateState();
+        }
+    });
+
+    const handleRemove = id => {
+        const { removeUser } = props.actions;
         const payload = { id };
         removeUser(payload);
     };
 
-    showModal = () => {
-        this.setState({ visible: true });
-    }
-
-    handleCancel = () => {
-        this.setState({ visible: false });
-    }
-
-    handleCreate = () => {
-        const { form } = this.formRef.props;
-        const { addUser } = this.props.actions;
+    const handleCreate = () => {
+        const { form } = formRef.props;
+        const { addUser } = props.actions;
         form.validateFields((error, values) => {
             if (error) {
                 return error;
@@ -72,92 +96,88 @@ class List extends React.Component {
         });
     };
 
-    componentDidUpdate() {
-        const { isUpdated } = this.props;
-        const { visible } = this.state;
-        const { resetUpdateState } = this.props.actions;
-
-        if (visible && isUpdated) {
-            this.setState({ visible: false });
-            resetUpdateState();
+    const saveFormRef = useCallback(node => {
+        if (node !== null) {
+            setFormRef(node);
         }
-    }
-    saveFormRef = formRef => {
-        this.formRef = formRef;
-    }
+    }, []);
 
-    render() {
-        const { visible } = this.state;
-        const { users } = this.props;
-        console.log(users);
-        const values = Object.values(users);
+    const { users } = props;
+    console.log(users);
+    const values = Object.values(users);
 
-        return (
-            <div>
-                <Button onClick={this.showModal} type={PRIMARY}>{ADD_USER}</Button>
-                <UserModal
-                    wrappedComponentRef={this.saveFormRef}
-                    visible={visible}
-                    onCancel={this.handleCancel}
-                    onCreate={this.handleCreate}
-                />
-                <Table
-                    dataSource={values}
-                    columns={
-                        [
-                            {
-                                dataIndex: FIRSTNAME,
-                                key: FIRSTNAME,
-                                title: FIRST_NAME,
-                            },
-                            {
-                                dataIndex: LASTNAME,
-                                key: LASTNAME,
-                                title: LAST_NAME,
-                            },
-                            {
-                                dataIndex: BIRTHDAY,
-                                key: BIRTHDAY,
-                                title: BIRTH_DAY,
-                            },
-                            {
-                                dataIndex: AGE,
-                                key: AGE,
-                                title: AGE_,
-                            },
-                            {
-                                dataIndex: HOBBY,
-                                key: HOBBY,
-                                title: HOBBY_,
-                            },
-                            {
-                                key: ACTION,
-                                render: (text, record) => (
-                                    <Popconfirm
-                                        title={POP_QUESTION}
-                                        onConfirm={() => this.handleRemove(record.id)}
-                                    >
-                                        <Icon className={DANGER} type={DELETE} />
-                                    </Popconfirm>
-                                ),
-                                title: ACTION_,
-                            },
-                        ]
-                    }
-                    rowKey={record => record.id}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            <Button onClick={() => setVisible(true)} type={PRIMARY}>{ADD_USER}</Button>
+            <UserModal
+                wrappedComponentRef={saveFormRef}
+                visible={visible}
+                onCancel={() => setVisible(false)}
+                onCreate={() => handleCreate()}
+            />
+            <Table
+                dataSource={dataSource}
+                columns={
+                    [
+                        {
+                            dataIndex: FIRSTNAME,
+                            key: FIRSTNAME,
+                            title: FIRST_NAME,
+                        },
+                        {
+                            dataIndex: LASTNAME,
+                            key: LASTNAME,
+                            title: LAST_NAME,
+                        },
+                        {
+                            dataIndex: BIRTHDAY,
+                            key: BIRTHDAY,
+                            title: BIRTH_DAY,
+                        },
+                        {
+                            dataIndex: AGE,
+                            key: AGE,
+                            title: AGE_,
+                        },
+                        {
+                            dataIndex: HOBBY,
+                            key: HOBBY,
+                            title: HOBBY_,
+                        },
+                        {
+                            key: ACTION,
+                            render: (text, record) => (
+                                <Popconfirm
+                                    title={POP_QUESTION}
+                                    onConfirm={() => handleRemove(record.id)}
+                                >
+                                    <Icon className={DANGER} type={DELETE} />
+                                </Popconfirm>
+                            ),
+                            title: ACTION_,
+                        },
+                    ]
+                }
+                rowKey={record => record.id}
+            />
+        </div>
+    );
+};
+
+Users.propTypes = {
+    actions: PropTypes.objectOf(PropTypes.func),
+    isUpdated: PropTypes.bool,
+    updateUsersList: PropTypes.objectOf(PropTypes.func),
+    users: PropTypes.objectOf(PropTypes.any),
+};
 
 const mapStateToProps = state => ({
-    users: getUsers(state),
     isUpdated: getisUpdated(state),
+    users: getUsers(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
