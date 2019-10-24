@@ -29,24 +29,17 @@ const dataSource = [
 
 const initialState = {
     isUpdated: false,
-    users: {},
+    users: dataSource,
 };
 
-const generateUsersObject = array => array.reduce((obj, item) => {
-    const { id } = item;
-    obj[id] = item;
-    return obj;
-}, {});
-
 const removeUsers = (items, id) => {
-    items[id] && delete items[id];
-    return { ...items };
+    const filteredItems = items.filter(user => user !== id);
+    return [...filteredItems];
 };
 
 const addUsers = (items, newItem) => {
-    const { id } = newItem;
-    items[id] = newItem;
-    return { ...items };
+    items.push(newItem);
+    return items;
 };
 
 export default (state = { ...initialState }, action) => {
@@ -54,7 +47,6 @@ export default (state = { ...initialState }, action) => {
         case UPDATE_USERS_LIST: {
             return {
                 ...state,
-                users: generateUsersObject(dataSource),
             };
         }
 

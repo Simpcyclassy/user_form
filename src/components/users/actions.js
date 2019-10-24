@@ -42,7 +42,6 @@ export const addUser = payload => ({
  * @param {Object} payload An object of captured users
  * @return {void} The {@link actionTypes.RESET_UPDATE_STATE RESET_UPDATE_STATE} action.
  */
-export const resetUpdateState = payload => ({
-    payload,
+export const resetUpdateState = () => ({
     type: RESET_UPDATE_STATE,
 });

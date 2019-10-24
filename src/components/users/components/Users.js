@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { shallowEqual, useCallback, useEffect, useState } from 'react';
 import { Button, Icon, Popconfirm, Table } from 'antd';
 import uuid from 'uuid/v1';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import UserModal from './UserModal';
 import * as actions from '../actions';
 import { MODAL_TEXTS, TABLE_TEXTS } from '../constants';
+import { getisUpdated, getUsers } from '../selectors';
 
 const { ADD_USER, DATE_PICKER, PRIMARY } = MODAL_TEXTS;
 const {
@@ -30,11 +31,11 @@ const Users = () => {
     const [visible, setVisible] = useState(false);
     const [formRef, setFormRef] = useState(null);
 
-    const users = useSelector(state => state.users);
-    console.log(users);
-    const isUpdated = useSelector(state => state.isUpdated);
+    const { users, isUpdated } = useSelector(state => ({
+        isUpdated: getisUpdated(state),
+        users: getUsers(state),
+    }), shallowEqual);
     const dispatch = useDispatch();
-    const tableData = Object.values(users);
 
     useEffect(() => {
         const { updateUsersList, resetUpdateState } = actions;
@@ -88,7 +89,7 @@ const Users = () => {
                 onCreate={() => handleCreate()}
             />
             <Table
-                dataSource={tableData}
+                dataSource={users}
                 columns={
                     [
                         {
@@ -121,7 +122,7 @@ const Users = () => {
                             render: (text, record) => (
                                 <Popconfirm
                                     title={POP_QUESTION}
-                                    onConfirm={() => handleRemove(record.id)}
+                                    onConfirm={() => handleRemove(record)}
                                 >
                                     <Icon className={DANGER} type={DELETE} />
                                 </Popconfirm>
