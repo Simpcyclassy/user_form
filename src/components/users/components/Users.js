@@ -35,6 +35,7 @@ const Users = () => {
         isUpdated: getisUpdated(state),
         users: getUsers(state),
     }), shallowEqual);
+
     const dispatch = useDispatch();
 
     useEffect(() => {

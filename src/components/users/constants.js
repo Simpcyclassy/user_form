@@ -69,3 +69,30 @@ export const FORM_ITEM_LAYOUT = {
         xs: { span: 20 },
     },
 };
+
+export const dataSource = [
+    {
+        age: '24',
+        birthday: '2000-10-02',
+        firstName: 'Chioma',
+        hobby: 'Learning',
+        id: '1',
+        lastName: 'Onyekpere',
+    },
+    {
+        age: '26',
+        birthday: '1900-09-02',
+        firstName: 'Tony',
+        hobby: 'Hiking',
+        id: '2',
+        lastName: 'Mecca',
+    },
+    {
+        age: '21',
+        birthday: '1960-10-01',
+        firstName: 'Lucia',
+        hobby: 'Swimming',
+        id: '3',
+        lastName: 'Lucious',
+    },
+];
