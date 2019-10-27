@@ -1,6 +1,5 @@
 import React, { shallowEqual, useCallback, useEffect, useState } from 'react';
-import { Button, Icon, Popconfirm, Table } from 'antd';
-import uuid from 'uuid/v1';
+import { Button, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import UserModal from './UserModal';
@@ -10,21 +9,18 @@ import { getisUpdated, getUsers } from '../selectors';
 
 const { ADD_USER, DATE_PICKER, PRIMARY } = MODAL_TEXTS;
 const {
-    ACTION,
-    ACTION_,
     AGE,
     AGE_,
     BIRTHDAY,
     BIRTH_DAY,
-    DANGER,
-    DELETE,
     FIRST_NAME,
     FIRSTNAME,
     HOBBY,
     HOBBY_,
+    ID,
     LASTNAME,
     LAST_NAME,
-    POP_QUESTION,
+    USER_ID,
 } = TABLE_TEXTS;
 
 const Users = () => {
@@ -39,8 +35,8 @@ const Users = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const { updateUsersList, resetUpdateState } = actions;
-        dispatch(updateUsersList());
+        const { requestUsersList, resetUpdateState } = actions;
+        dispatch(requestUsersList());
 
         if (visible && isUpdated) {
             setVisible(false);
@@ -48,15 +44,9 @@ const Users = () => {
         }
     }, [dispatch, isUpdated, visible]);
 
-    const handleRemove = id => {
-        const { removeUser } = actions;
-        const payload = { id };
-        dispatch(removeUser(payload));
-    };
-
     const handleCreate = () => {
         const { form } = formRef.props;
-        const { addUser } = actions;
+        const { requestProductUpdate } = actions;
         form.validateFields((error, values) => {
             if (error) {
                 return error;
@@ -67,10 +57,9 @@ const Users = () => {
                 birthday: values[DATE_PICKER].format('YYYY-MM-DD'),
                 firstName: values.firstName,
                 hobby: values.hobby,
-                id: uuid(),
                 lastName: values.lastName,
             };
-            dispatch(addUser(user));
+            dispatch(requestProductUpdate(user));
         });
     };
 
@@ -119,16 +108,9 @@ const Users = () => {
                             title: HOBBY_,
                         },
                         {
-                            key: ACTION,
-                            render: (text, record) => (
-                                <Popconfirm
-                                    title={POP_QUESTION}
-                                    onConfirm={() => handleRemove(record)}
-                                >
-                                    <Icon className={DANGER} type={DELETE} />
-                                </Popconfirm>
-                            ),
-                            title: ACTION_,
+                            dataIndex: ID,
+                            key: ID,
+                            title: USER_ID,
                         },
                     ]
                 }

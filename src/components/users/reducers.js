@@ -1,16 +1,11 @@
-import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
+import { ADD_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
 
 const initialState = {
     isUpdated: false,
     users: [],
 };
 
-// const gettAllUsers = array => array;
-
-const removeUsers = (items, id) => {
-    const filteredItems = items.filter(user => user !== id);
-    return [...filteredItems];
-};
+const gettAllUsers = array => array;
 
 const addUsers = (items, newItem) => {
     items.push(newItem);
@@ -20,20 +15,10 @@ const addUsers = (items, newItem) => {
 export default (state = { ...initialState }, action) => {
     switch (action.type) {
         case UPDATE_USERS_LIST: {
-            // const { payload } = action;
+            const { payload } = action;
             return {
                 ...state,
-                // users: gettAllUsers(payload),
-            };
-        }
-
-        case REMOVE_USER: {
-            const { users } = state;
-            const { payload: { id } } = action;
-
-            return {
-                ...state,
-                users: removeUsers(users, id),
+                users: gettAllUsers(payload),
             };
         }
 

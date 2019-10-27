@@ -2,6 +2,9 @@
 export const NAME = 'users';
 
 /** @constant */
+export const USERS_URL = 'https://us-central1-simpcys-firstcasts.cloudfunctions.net/users';
+
+/** @constant */
 export const TABLE_TEXTS = {
     ACTION: 'action',
     ACTION_: 'Action',
@@ -15,9 +18,11 @@ export const TABLE_TEXTS = {
     FIRST_NAME: 'First Name',
     HOBBY: 'hobby',
     HOBBY_: 'Hobby',
+    ID: 'id',
     LASTNAME: 'lastName',
     LAST_NAME: 'Last Name',
     POP_QUESTION: 'Are you sure you want to remove item?',
+    USER_ID: 'User Id',
 };
 
 /** @constant */
