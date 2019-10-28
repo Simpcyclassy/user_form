@@ -8,15 +8,15 @@ import { USERS_URL } from './constants';
 import database from './firebase';
 
 /**
- * Listens to all updates
+ * Handles requesting the list of users the database
  *
  * @return {Void} - void
  */
 
-function* startListener() {
+function* requestAllUsers() {
     const channel = new eventChannel(emiter => {
-        const listener = database.ref().on('value', snapshot => {
-            emiter({ data: snapshot.val() || {} });
+        const listener = database.ref('users').on('value', snapshot => {
+            emiter({ users: snapshot.val() || {} });
         });
 
         return () => {
@@ -25,38 +25,13 @@ function* startListener() {
     });
 
     while (true) {
-        const { data } = yield take(channel);
-        console.log(data);
+        const { users } = yield take(channel);
+        Object.keys(users).map(user => users[user]);
+        console.log(users);
 
-        yield put(updateUsersList(data));
+        yield put(updateUsersList(users));
     }
 }
-
-/**
- * Handles requesting the list of users the database
- *
- * @return {Void} - void
- */
-// function* requestAllUsers() {
-//     try {
-//         const response = yield fetch(USERS_URL)
-//             .then(res => res.json());
-
-//         const data = yield Object.keys(response.users).map(key => response.users[key]);
-
-//         const length = data.length - 1;
-
-//         if (data[length].id) {
-//             yield put(updateUsersList(data));
-//         } else {
-//             // eslint-disable-next-line no-console
-//             console.log('ERROR', data);
-//         }
-//     } catch (error) {
-//         // eslint-disable-next-line no-console
-//         console.log(error);
-//     }
-// }
 
 function* requestAddUsersUpdate(action) {
     try {
@@ -73,15 +48,6 @@ function* requestAddUsersUpdate(action) {
     }
 }
 
-function* watchStartListener() {
-    try {
-        yield fork(REQUEST_USERS_LIST, startListener);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
-    }
-}
-
 /**
  * @function
  * Watches for the {@link actionTypes.REQUEST_USERS_LIST REQUEST_USERS_LIST} action.
@@ -89,14 +55,15 @@ function* watchStartListener() {
  *
  * @return {void}
  */
-// function* watchRequestUsersList() {
-//     try {
-//         yield takeLatest(REQUEST_USERS_LIST, requestAllUsers);
-//     } catch (error) {
-//         // eslint-disable-next-line no-console
-//         console.log(error);
-//     }
-// }
+
+function* watchRequestUsersList() {
+    try {
+        yield fork(REQUEST_USERS_LIST, requestAllUsers);
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+    }
+}
 
 /**
  * @function
@@ -116,8 +83,7 @@ function* watchRequestAddUser() {
 
 export default function* () {
     yield all([
-        watchStartListener(),
-        // watchRequestUsersList(),
+        watchRequestUsersList(),
         watchRequestAddUser(),
     ]);
 }
