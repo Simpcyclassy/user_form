@@ -26,6 +26,8 @@ function* startListener() {
 
     while (true) {
         const { data } = yield take(channel);
+        console.log(data);
+
         yield put(updateUsersList(data));
     }
 }
