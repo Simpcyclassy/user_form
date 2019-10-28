@@ -1,9 +1,34 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { all, fork, take, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import { eventChannel } from 'redux-saga'
 
 import { addUser, updateUsersList } from './actions';
 import { REQUEST_USERS_LIST, REQUEST_ADD_USER } from './actionTypes';
 import { USERS_URL } from './constants';
+import database from './firebase';
+
+/**
+ * Listen to all updates
+ *
+ * @return {Void} - void
+ */
+
+function* startListener() {
+    const channel = new eventChannel(emiter => {
+        const listener = database.ref('users').on('value', snapshot => {
+            emiter({ data: snapshot.val() || {} });
+        });
+
+        return () => {
+            listener.off();
+        };
+    });
+
+    while (true) {
+        const { data } = yield take(channel);
+        yield put(updateUsersList(data));
+    }
+}
 
 /**
  * Handles requesting the list of users the database
@@ -46,6 +71,15 @@ function* requestAddUsersUpdate(action) {
     }
 }
 
+function* watchStartListener() {
+    try {
+        yield fork(startListener);
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+    }
+}
+
 /**
  * @function
  * Watches for the {@link actionTypes.REQUEST_USERS_LIST REQUEST_USERS_LIST} action.
@@ -80,6 +114,7 @@ function* watchRequestAddUser() {
 
 export default function* () {
     yield all([
+        watchStartListener(),
         watchRequestUsersList(),
         watchRequestAddUser(),
     ]);
