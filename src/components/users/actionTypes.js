@@ -9,14 +9,6 @@ import { NAME } from './constants';
 export const UPDATE_USERS_LIST = `${NAME}/UPDATE_USERS_LIST`;
 
 /**
- * Fired by the {@link actions.removeUser removeUser}
- * action creator.
- *
- * @type {String}
- */
-export const REMOVE_USER = `${NAME}/REMOVE_USER`;
-
-/**
  * Fired by the {@link actions.addUser addUser}
  * action creator.
  *
@@ -47,11 +39,3 @@ export const REQUEST_USERS_LIST = `${NAME}/REQUEST_USERS_LIST`;
  * @type {String}
  */
 export const REQUEST_ADD_USER = `${NAME}/REQUEST_ADD_USER`;
-
-/**
- * Fired by the {@link actions.requestUserDelete requestUserDelete}
- * action creator.
- *
- * @type {String}
- */
-export const REQUEST_USER_DELETE = `${NAME}/REQUEST_USER_DELETE`;

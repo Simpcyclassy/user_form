@@ -12,26 +12,27 @@ import firebase from './firebase';
  *
  * @return {Void} - void
  */
-
 function* requestAllUsers() {
+    // #1: Creates an eventChannel and starts the listener;
     const channel = new eventChannel(emiter => {
         const listener = firebase
             .database()
             .ref('users')
             .on('value', snapshot => {
-                emiter({ users: snapshot.val() || {} });
+                emiter({ data: snapshot.val() || {} });
             });
 
+        // #2: Return the shutdown method;
         return () => {
             listener.off();
         };
     });
-
+    // #3: Creates a loops to keep the execution in memory;
     while (true) {
-        const { users } = yield take(channel);
-        Object.keys(users).map(user => users[user]);
-        console.log(users);
-        yield put(updateUsersList(users));
+        const { data } = yield take(channel);
+        console.log(data);
+        // #4: Pause the task until the channel emits a signal and dispatch an action in the store;
+        yield put(updateUsersList(data));
     }
 }
 
