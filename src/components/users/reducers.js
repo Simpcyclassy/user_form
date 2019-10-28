@@ -5,7 +5,7 @@ const initialState = {
     users: [],
 };
 
-const gettAllUsers = array => array;
+const getAllUsers = array => array;
 
 const addUsers = (items, newItem) => {
     items.push(newItem);
@@ -18,7 +18,7 @@ export default (state = { ...initialState }, action) => {
             const { payload } = action;
             return {
                 ...state,
-                users: gettAllUsers(payload),
+                users: getAllUsers(payload),
             };
         }
 

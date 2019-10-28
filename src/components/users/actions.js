@@ -19,7 +19,6 @@ export const updateUsersList = payload => ({
     payload,
     type: UPDATE_USERS_LIST,
 });
-
 /**
  * Triggers request to remove a user
  *

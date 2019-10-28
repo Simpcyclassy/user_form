@@ -1,11 +1,11 @@
 import { all, fork, take, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import { eventChannel } from 'redux-saga'
+import { eventChannel } from 'redux-saga';
 
 import { addUser, updateUsersList } from './actions';
 import { REQUEST_USERS_LIST, REQUEST_ADD_USER } from './actionTypes';
 import { USERS_URL } from './constants';
-import database from './firebase';
+import firebase from './firebase';
 
 /**
  * Handles requesting the list of users the database
@@ -15,9 +15,12 @@ import database from './firebase';
 
 function* requestAllUsers() {
     const channel = new eventChannel(emiter => {
-        const listener = database.ref('users').on('value', snapshot => {
-            emiter({ users: snapshot.val() || {} });
-        });
+        const listener = firebase
+            .database()
+            .ref('users')
+            .on('value', snapshot => {
+                emiter({ users: snapshot.val() || {} });
+            });
 
         return () => {
             listener.off();
@@ -28,7 +31,6 @@ function* requestAllUsers() {
         const { users } = yield take(channel);
         Object.keys(users).map(user => users[user]);
         console.log(users);
-
         yield put(updateUsersList(users));
     }
 }
