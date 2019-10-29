@@ -3,7 +3,7 @@ import axios from 'axios';
 import { eventChannel } from 'redux-saga';
 
 import { addUser, updateUsersList } from './actions';
-import { REQUEST_USERS_LIST, REQUEST_ADD_USER } from './actionTypes';
+import { REQUEST_ADD_USER } from './actionTypes';
 import { USERS_URL } from './constants';
 import firebase from './firebase';
 
@@ -14,13 +14,12 @@ import firebase from './firebase';
  */
 
 function* requestAllUsers() {
-    const channel = new eventChannel(emiter => {
-        const listener = firebase
-            .database()
-            .ref('/users')
-            .on('value', snapshot => {
-                emiter({ users: snapshot.val() || {} });
+    const channel = new eventChannel(emitter => {
+        const listener = firebase.on('value', snapshot => {
+            emitter({
+                data: snapshot.val() || {},
             });
+        });
 
         return () => {
             listener.off();
@@ -28,10 +27,21 @@ function* requestAllUsers() {
     });
 
     while (true) {
-        const { users } = yield take(channel);
-        Object.keys(users).map(user => users[user]);
-        console.log(users);
-        yield put(updateUsersList(users));
+        const { data } = yield take(channel);
+
+        try {
+            const payload = yield Object.keys(data).map(key => data[key]);
+
+            // make sure payload has id else wait for it
+            const length = payload.length - 1;
+
+            if (payload[length].id) {
+                yield put(updateUsersList(payload));
+            }
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(error);
+        }
     }
 }
 
@@ -60,7 +70,7 @@ function* requestAddUsersUpdate(action) {
 
 function* watchRequestUsersList() {
     try {
-        yield fork(REQUEST_USERS_LIST, requestAllUsers);
+        yield fork(requestAllUsers);
     } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);

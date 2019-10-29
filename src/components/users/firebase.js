@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 const firebaseConfig = {
@@ -12,4 +12,9 @@ const firebaseConfig = {
     storageBucket: 'simpcys-firstcasts.appspot.com',
 };
 
-export default firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database().ref('users/');
+firebase.database.enableLogging(true, true);
+
+export default database;

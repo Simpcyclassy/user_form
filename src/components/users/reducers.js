@@ -5,8 +5,6 @@ const initialState = {
     users: [],
 };
 
-const getAllUsers = array => array;
-
 const addUsers = (items, newItem) => {
     items.push(newItem);
     return items;
@@ -15,10 +13,11 @@ const addUsers = (items, newItem) => {
 export default (state = { ...initialState }, action) => {
     switch (action.type) {
         case UPDATE_USERS_LIST: {
-            const { payload } = action;
+            const { payload: newUser } = action;
             return {
                 ...state,
-                users: getAllUsers(payload),
+                isUpdated: false,
+                users: [...newUser],
             };
         }
 

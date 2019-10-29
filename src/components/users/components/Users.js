@@ -35,15 +35,13 @@ const Users = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const { requestUsersList, resetUpdateState } = actions;
-        dispatch(requestUsersList());
+        const { resetUpdateState } = actions;
 
         if (visible && isUpdated) {
             setVisible(false);
             dispatch(resetUpdateState());
         }
     }, [dispatch, isUpdated, visible]);
-
     const handleCreate = () => {
         const { form } = formRef.props;
         const { requestProductUpdate } = actions;
