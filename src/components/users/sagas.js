@@ -17,7 +17,7 @@ function* requestAllUsers() {
     const channel = new eventChannel(emitter => {
         const listener = firebase.on('value', snapshot => {
             emitter({
-                data: snapshot.val() || {},
+                users: snapshot.val() || {},
             });
         });
 
@@ -27,12 +27,11 @@ function* requestAllUsers() {
     });
 
     while (true) {
-        const { data } = yield take(channel);
+        const { users } = yield take(channel);
 
         try {
-            const payload = yield Object.keys(data).map(key => data[key]);
+            const payload = yield Object.keys(users).map(key => users[key]);
 
-            // make sure payload has id else wait for it
             const length = payload.length - 1;
 
             if (payload[length].id) {
