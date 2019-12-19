@@ -1,40 +1,8 @@
-import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
-
-const dataSource = [
-    {
-        age: '24',
-        birthday: '2000-10-02',
-        firstName: 'Chioma',
-        hobby: 'Learning',
-        id: '1',
-        lastName: 'Onyekpere',
-    },
-    {
-        age: '26',
-        birthday: '1900-09-02',
-        firstName: 'Tony',
-        hobby: 'Hiking',
-        id: '2',
-        lastName: 'Mecca',
-    },
-    {
-        age: '21',
-        birthday: '1960-10-01',
-        firstName: 'Lucia',
-        hobby: 'Swimming',
-        id: '3',
-        lastName: 'Lucious',
-    },
-];
+import { ADD_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
 
 const initialState = {
     isUpdated: false,
-    users: dataSource,
-};
-
-const removeUsers = (items, id) => {
-    const filteredItems = items.filter(user => user !== id);
-    return [...filteredItems];
+    users: [],
 };
 
 const addUsers = (items, newItem) => {
@@ -45,18 +13,11 @@ const addUsers = (items, newItem) => {
 export default (state = { ...initialState }, action) => {
     switch (action.type) {
         case UPDATE_USERS_LIST: {
+            const { payload: newUser } = action;
             return {
                 ...state,
-            };
-        }
-
-        case REMOVE_USER: {
-            const { users } = state;
-            const { payload: { id } } = action;
-
-            return {
-                ...state,
-                users: removeUsers(users, id),
+                isUpdated: false,
+                users: [...newUser],
             };
         }
 

@@ -1,4 +1,10 @@
-import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './actionTypes';
+import {
+    ADD_USER,
+    RESET_UPDATE_STATE,
+    REQUEST_ADD_USER,
+    REQUEST_USERS_LIST,
+    UPDATE_USERS_LIST
+} from './actionTypes';
 
 /**
  * Triggers request to update users items
@@ -7,22 +13,10 @@ import { ADD_USER, REMOVE_USER, RESET_UPDATE_STATE, UPDATE_USERS_LIST } from './
  * @param {Object} payload An object of users dataSource
  * @return {void} The {@link actionTypes.UPDATE_USERS_LIST UPDATE_USERS_LIST} action.
  */
-export const updateUsersList = () => ({
+export const updateUsersList = payload => ({
+    payload,
     type: UPDATE_USERS_LIST,
 });
-
-/**
- * Triggers request to remove a user
- *
- * @function
- * @param {Object} payload An object of captured users
- * @return {void} The {@link actionTypes.REMOVE_USER REMOVE_USER} action.
- */
-export const removeUser = payload => ({
-    payload,
-    type: REMOVE_USER,
-});
-
 /**
  * Triggers request to add a user
  *
@@ -44,4 +38,29 @@ export const addUser = payload => ({
  */
 export const resetUpdateState = () => ({
     type: RESET_UPDATE_STATE,
+});
+
+/**
+ * Triggers request to retrieve all users from the database
+ *
+ * @function
+ * @return {Object} The {@link actionTypes.REQUEST_USERS_LIST REQUEST_USERS_LIST}
+ * action.
+ */
+export const requestUsersList = () => ({
+    type: REQUEST_USERS_LIST,
+});
+
+/**
+ * Triggers request to update product item details in the database
+ *
+ * @function
+ *
+ * @param {Object} payload - the data sent with the action
+ * @return {Object} The {@link actionTypes.REQUEST_ADD_USER REQUEST_ADD_USER}
+ * action.
+ */
+export const requestProductUpdate = payload => ({
+    payload,
+    type: REQUEST_ADD_USER,
 });

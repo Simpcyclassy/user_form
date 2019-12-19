@@ -72,7 +72,7 @@
             "after": true
         }],
         "no-const-assign": "error",
-        "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }],
+        "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
         "no-unused-expressions": [2, { "allowShortCircuit": true }],
         "no-dupe-class-members": "error",
         "no-duplicate-imports": "error",

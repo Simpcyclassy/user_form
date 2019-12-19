@@ -2,6 +2,9 @@
 export const NAME = 'users';
 
 /** @constant */
+export const USERS_URL = 'https://us-central1-simpcys-firstcasts.cloudfunctions.net/users';
+
+/** @constant */
 export const TABLE_TEXTS = {
     ACTION: 'action',
     ACTION_: 'Action',
@@ -15,9 +18,11 @@ export const TABLE_TEXTS = {
     FIRST_NAME: 'First Name',
     HOBBY: 'hobby',
     HOBBY_: 'Hobby',
+    ID: 'id',
     LASTNAME: 'lastName',
     LAST_NAME: 'Last Name',
     POP_QUESTION: 'Are you sure you want to remove item?',
+    USER_ID: 'User Id',
 };
 
 /** @constant */
@@ -69,3 +74,30 @@ export const FORM_ITEM_LAYOUT = {
         xs: { span: 20 },
     },
 };
+
+export const dataSource = [
+    {
+        age: '24',
+        birthday: '2000-10-02',
+        firstName: 'Chioma',
+        hobby: 'Learning',
+        id: '1',
+        lastName: 'Onyekpere',
+    },
+    {
+        age: '26',
+        birthday: '1900-09-02',
+        firstName: 'Tony',
+        hobby: 'Hiking',
+        id: '2',
+        lastName: 'Mecca',
+    },
+    {
+        age: '21',
+        birthday: '1960-10-01',
+        firstName: 'Lucia',
+        hobby: 'Swimming',
+        id: '3',
+        lastName: 'Lucious',
+    },
+];
